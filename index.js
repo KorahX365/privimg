@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use("/uploads", express.static("uploads"));  // Aseguramos que Express sirva las imágenes
 
 const storage = multer.diskStorage({
   destination: "uploads/",
@@ -25,7 +26,7 @@ app.post("/create", upload.single("file"), (req, res) => {
   const id = crypto.randomBytes(8).toString("hex");
   posts[id] = {
     text: req.body.text,
-    image: req.file ? req.file.path : null,
+    image: req.file ? `/uploads/${req.file.filename}` : null,  // Usamos la ruta correcta para la imagen
   };
   res.json({ link: `/post/${id}` });
 });
