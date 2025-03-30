@@ -3,35 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crear Post</title>
+  <title>Ver Post</title>
 </head>
 <body>
-  <h1>Crear Post</h1>
-  <form id="create-post-form" enctype="multipart/form-data">
-    <textarea name="text" placeholder="Escribe tu post" required></textarea><br>
-    <input type="file" name="file"><br>
-    <button type="submit">Crear Post</button>
-  </form>
-
-  <h2>Enlace para ver el Post</h2>
-  <p id="post-link"></p>
+  <h1>Post</h1>
+  <div id="post-content">
+    <p>Cargando el post...</p>
+  </div>
 
   <script>
-    document.getElementById("create-post-form").addEventListener("submit", function(event) {
-      event.preventDefault();
+    // Obtener el id del post desde la URL
+    const postId = window.location.pathname.split("/").pop();
 
-      const formData = new FormData(this);
-
-      fetch("/create", {
-        method: "POST",
-        body: formData,
-      })
+    // Hacer la solicitud para obtener los datos del post
+    fetch(`/post/${postId}`)
       .then(response => response.json())
       .then(data => {
-        document.getElementById("post-link").innerHTML = `Accede al post a través de este enlace: <a href="${data.link}" target="_blank">${data.link}</a>`;
+        const postContent = document.getElementById("post-content");
+
+        // Mostrar el texto del post
+        postContent.innerHTML = `<p>${data.text}</p>`;
+        
+        // Mostrar la imagen si existe
+        if (data.image) {
+          postContent.innerHTML += `<img src="${data.image}" alt="Imagen del post" style="max-width: 100%; height: auto;">`;
+        }
       })
-      .catch(error => console.error("Error al crear el post:", error));
-    });
+      .catch(error => {
+        document.getElementById("post-content").innerHTML = "<p>No se pudo cargar el post.</p>";
+      });
   </script>
 </body>
 </html>
