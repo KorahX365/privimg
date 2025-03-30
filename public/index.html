@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Post</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crea tu Post</h1>
+        <form id="create-post-form" enctype="multipart/form-data">
+            <textarea id="text" placeholder="Escribe tu post..." required></textarea>
+            <input type="file" id="file" accept="image/*">
+            <button type="submit">Crear Post</button>
+        </form>
+
+        <h2>Ver Post</h2>
+        <div>
+            <input type="text" id="post-link" placeholder="Ingresa el link del post" />
+            <button id="view-post">Ver Post</button>
+        </div>
+        
+        <div id="post-view">
+            <h3>Post</h3>
+            <div id="post-content"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
