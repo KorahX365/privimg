@@ -20,7 +20,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const posts = {};
-const seenPosts = {};
 
 app.post("/create", upload.single("file"), (req, res) => {
   const id = crypto.randomBytes(8).toString("hex");
@@ -33,18 +32,11 @@ app.post("/create", upload.single("file"), (req, res) => {
 
 app.get("/post/:id", (req, res) => {
   const id = req.params.id;
-  const ip = req.ip;
-  const device = req.headers["user-agent"];
 
   if (!posts[id]) {
     return res.status(404).send("Post no encontrado");
   }
 
-  if (seenPosts[ip + device]?.includes(id)) {
-    return res.status(403).send("Ya has visto este post");
-  }
-
-  seenPosts[ip + device] = [...(seenPosts[ip + device] || []), id];
   res.json(posts[id]);
 });
 
