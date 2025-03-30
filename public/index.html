@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Post</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Post</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Crea tu Post</h1>
-        <form id="create-post-form" enctype="multipart/form-data">
-            <textarea id="text" placeholder="Escribe tu post..." required></textarea>
-            <input type="file" id="file" accept="image/*">
-            <button type="submit">Crear Post</button>
-        </form>
+  <h1>Crear Post</h1>
+  <form id="create-post-form" enctype="multipart/form-data">
+    <textarea name="text" placeholder="Escribe tu post" required></textarea><br>
+    <input type="file" name="file"><br>
+    <button type="submit">Crear Post</button>
+  </form>
 
-        <h2>Ver Post</h2>
-        <div>
-            <input type="text" id="post-link" placeholder="Ingresa el link del post" />
-            <button id="view-post">Ver Post</button>
-        </div>
-        
-        <div id="post-view">
-            <h3>Post</h3>
-            <div id="post-content"></div>
-        </div>
-    </div>
+  <h2>Enlace para ver el Post</h2>
+  <p id="post-link"></p>
 
-    <script src="script.js"></script>
+  <script>
+    document.getElementById("create-post-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch("/create", {
+        method: "POST",
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("post-link").innerHTML = `Accede al post a través de este enlace: <a href="${data.link}" target="_blank">${data.link}</a>`;
+      })
+      .catch(error => console.error("Error al crear el post:", error));
+    });
+  </script>
 </body>
 </html>
